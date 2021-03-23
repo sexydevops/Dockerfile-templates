@@ -6,6 +6,8 @@ ENV GLIBC_VER=2.31-r0
 
 # install glibc compatibility for alpine
 RUN apk --no-cache add \
+        bash \
+        perl \
         jq \
         binutils \
         curl \
@@ -28,8 +30,8 @@ RUN apk --no-cache add \
     && apk --no-cache del \
         binutils \
     && apk add --no-cache --upgrade grep \
-    && mv /bin/grep /usr/local/bin/dgrep \
+    && cp /bin/grep /usr/local/bin/dgrep \
     && rm glibc-${GLIBC_VER}.apk \
     && rm glibc-bin-${GLIBC_VER}.apk \
     && rm -rf /var/cache/apk/* \
-    && curl -L http://mygem.io/s/matchTextInFile > ~/.bash_profile
+    && curl -L http://mygem.io/s/matchText >> ~/.bash_profile
