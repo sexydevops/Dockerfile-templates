@@ -1,0 +1,15 @@
+{
+  "name": "devops-express-server",
+  "version": "1.0.0",
+  "description": "This is an all in one Devops server that has routes support: - Basic server information (versioning, private ip) - Success responses - Failed responses - High memory/cpu - Random error responses",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}
