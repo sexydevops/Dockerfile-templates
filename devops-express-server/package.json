@@ -4,7 +4,7 @@
   "description": "This is an all in one Devops server that has routes support: - Basic server information (versioning, private ip) - Success responses - Failed responses - High memory/cpu - Random error responses",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node src/index.js"
   },
   "keywords": [],
   "author": "",

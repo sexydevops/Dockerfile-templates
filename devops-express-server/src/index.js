@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 3000;
+const axios = require('axios');
 
 const {
   getPrivateIPV4,
@@ -30,7 +31,7 @@ app.get('/crash-slow', (_, res) => {
 })
 
 app.get('/demo/es', async (_, res) => {
- const urls = ["68.79.20.34:9200", "68.79.21.229:9200"].map(v=>v+"/sampleindex/sampletype/_search");
+ const urls = ["68.79.20.34:9200", "68.79.21.229:9200"].map(v=>"http://"+v+"/sampleindex/sampletype/_search");
  for (const url of urls) {
    const options = {
      method: 'GET',
@@ -40,7 +41,7 @@ app.get('/demo/es', async (_, res) => {
      const {data} = await axios(options);
      return res.status(200).send(data);
    } catch (e) {
-     
+     console.log(e)     
    }
    res.status(500).send("error");
  }
