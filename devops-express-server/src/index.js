@@ -29,6 +29,22 @@ app.get('/crash-slow', (_, res) => {
   crashServer(50000);
 })
 
+app.get('/demo/es', async (_, res) => {
+ const urls = ["68.79.20.34:9200", "68.79.21.229:9200"].map(v=>v+"/sampleindex/sampletype/_search");
+ for (const url of urls) {
+   const options = {
+     method: 'GET',
+     url,
+   };
+   try {
+     const {data} = await axios(options);
+     return res.status(200).send(data);
+   } catch (e) {
+     
+   }
+   res.status(500).send("error");
+ }
+})
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 })
