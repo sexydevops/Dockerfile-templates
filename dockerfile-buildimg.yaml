@@ -8,16 +8,24 @@ ENV GLIBC_VER=2.31-r0
 
 # install glibc compatibility for alpine
 RUN apk --no-cache add \
+        make g++ \
         openssh-client \
         bash \
+        gawk \
         perl \
         jq \
         binutils \
         curl \
         git \
+        unzip \
     && curl -sL https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub -o /etc/apk/keys/sgerrand.rsa.pub \
     && curl -sLO https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VER}/glibc-${GLIBC_VER}.apk \
     && curl -sLO https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VER}/glibc-bin-${GLIBC_VER}.apk \
+    && wget https://github.com/aws/aws-sam-cli/releases/latest/download/aws-sam-cli-linux-x86_64.zip \
+    && unzip aws-sam-cli-linux-x86_64.zip -d aws-sam-cli-linux-x86_64 \ 
+    && ls -la \
+    && aws-sam-cli-linux-x86_64/install \
+    && rm -rf aws-sam-cli-linux-x86_64/aws-sam-cli-src aws-sam-cli-linux-x86_64/install aws-sam-cli-linux-x86_64/THIRD-PARTY-LICENSES \
     && apk add --no-cache \
         glibc-${GLIBC_VER}.apk \
         glibc-bin-${GLIBC_VER}.apk \
@@ -33,6 +41,7 @@ RUN apk --no-cache add \
     && apk --no-cache del \
         binutils \
     && apk add --no-cache --upgrade grep \
+    && apk add --update python3 py3-pip \
     && cp /bin/grep /usr/local/bin/dgrep \
     && rm glibc-${GLIBC_VER}.apk \
     && rm glibc-bin-${GLIBC_VER}.apk \
