@@ -1,0 +1,47 @@
+# This is a lightweight Dockerfile which supports Node 12, AWS CLI v2 and a necessary tools (jq, perl, bash, open ssh, git)
+# Youc can custom it to fit your need
+FROM node:14-alpine
+
+USER root
+
+ENV GLIBC_VER=2.31-r0
+
+# install glibc compatibility for alpine
+RUN apk --no-cache add \
+        make g++ \
+        openssh-client \
+        bash \
+        gawk \
+        perl \
+        jq \
+        binutils \
+        curl \
+        git \
+        unzip \
+    && curl -sL https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub -o /etc/apk/keys/sgerrand.rsa.pub \
+    && curl -sLO https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VER}/glibc-${GLIBC_VER}.apk \
+    && curl -sLO https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VER}/glibc-bin-${GLIBC_VER}.apk \
+    && wget https://github.com/aws/aws-sam-cli/releases/latest/download/aws-sam-cli-linux-x86_64.zip \
+    && unzip aws-sam-cli-linux-x86_64.zip -d aws-sam-cli-linux-x86_64 \
+    && aws-sam-cli-linux-x86_64/install \
+    && rm -rf aws-sam-cli-linux-x86_64/aws-sam-cli-src aws-sam-cli-linux-x86_64/install aws-sam-cli-linux-x86_64/THIRD-PARTY-LICENSES \
+    && apk add --no-cache \
+        glibc-${GLIBC_VER}.apk \
+        glibc-bin-${GLIBC_VER}.apk \
+    && curl -sL https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zip \
+    && unzip awscliv2.zip \
+    && aws/install \
+    && rm -rf \
+        awscliv2.zip \
+        aws \
+        /usr/local/aws-cli/v2/*/dist/aws_completer \
+        /usr/local/aws-cli/v2/*/dist/awscli/data/ac.index \
+        /usr/local/aws-cli/v2/*/dist/awscli/examples \
+    && apk --no-cache del \
+        binutils \
+    && apk add --no-cache --upgrade grep \
+    && apk add --update python3 py3-pip \
+    && cp /bin/grep /usr/local/bin/dgrep \
+    && rm glibc-${GLIBC_VER}.apk \
+    && rm glibc-bin-${GLIBC_VER}.apk \
+    && rm -rf /var/cache/apk/*
